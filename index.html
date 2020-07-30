@@ -2,6 +2,19 @@
 <head>
 	<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+  <!-- Load Leaflet from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet@2.4.1/dist/esri-leaflet.js"
+    integrity="sha512-xY2smLIHKirD03vHKDJ2u4pqeHA7OQZZ27EjtqmuhDguxiUvdsOuXMwkg16PQrm9cgTmXtoxA6kwr8KBy3cdcw=="
+    crossorigin=""></script>
 <style>
 	body {margin: 0; padding:0;}
 	#map { position:absolute; top:0; bottom:0; width:100%; }
@@ -9,6 +22,11 @@
 </head>
 
 <body>
+  <!-- Include Leaflet.heat from CDN -->
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
+<!-- Load Heatmap Feature Layer from CDN -->
+<script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
 <link
 rel="stylesheet"
@@ -176,6 +194,7 @@ zoom: zoom
 map.on('click', 'unclustered-point', function(e) {
 var coordinates = e.features[0].geometry.coordinates.slice();
 var name = e.features[0].properties.PROJECT_NAME;
+
  
 // Ensure that if the map is zoomed out such that
 // multiple copies of the feature are visible, the
@@ -235,10 +254,164 @@ mapboxgl: mapboxgl
 })
 );
 
-	map.moveLayer('clusters');
+map.on('load', function() {
+// Add a geojson point source.
+// Heatmap layers also work with a vector tile source.
+map.addSource('consumption', {
+'type': 'geojson',
+'data':
+'https://opendata.arcgis.com/datasets/0b93a92428fa4491bab79359bbde8d8e_0.geojson'
+});
+ 
+map.addLayer(
+{
+'id': 'land-consumption-rate',
+'type': 'heatmap',
+'source': 'consumption',
+'maxzoom': 9,
+'paint': {
+// Increase the heatmap weight based on frequency and property magnitude
+'heatmap-weight': [
+'interpolate',
+['linear'],
+['get', 'Change_in_Built_Up_Area_2000_20'],
+0,
+0,
+6,
+1
+],
+// Increase the heatmap color weight weight by zoom level
+// heatmap-intensity is a multiplier on top of heatmap-weight
+'heatmap-intensity': [
+'interpolate',
+['linear'],
+['zoom'],
+0,
+1,
+9,
+3
+],
+// Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+// Begin color ramp at 0-stop with a 0-transparancy color
+// to create a blur-like effect.
+'heatmap-color': [
+'interpolate',
+['linear'],
+['heatmap-density'],
+0,
+'rgba(33,102,172,0)',
+0.2,
+'rgb(103,169,207)',
+0.4,
+'rgb(209,229,240)',
+0.6,
+'rgb(253,219,199)',
+0.8,
+'rgb(239,138,98)',
+1,
+'rgb(178,24,43)'
+],
+// Adjust the heatmap radius by zoom level
+'heatmap-radius': [
+'interpolate',
+['linear'],
+['zoom'],
+0,
+2,
+9,
+20
+],
+// Transition from heatmap to circle layer by zoom level
+'heatmap-opacity': [
+'interpolate',
+['linear'],
+['zoom'],
+7,
+1,
+9,
+0
+]
+}
+},
+'waterway-label'
+);
+ 
+map.addLayer(
+{
+'id': 'consumption_point',
+'type': 'circle',
+'source': 'consumption',
+'minzoom': 7,
+'paint': {
+// Size circle radius by earthquake magnitude and zoom level
+'circle-radius': [
+'interpolate',
+['linear'],
+['zoom'],
+7,
+['interpolate', ['linear'], ['get', 'mag'], 1, 1, 6, 4],
+16,
+['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
+],
+// Color circle by earthquake magnitude
+'circle-color': [
+'interpolate',
+['linear'],
+['get', 'Change_in_Built_Up_Area_2000_20'],
+0,
+'rgba(33,102,172,0)',
+20,
+'rgb(103,169,207)',
+40,
+'rgb(209,229,240)',
+60,
+'rgb(253,219,199)',
+80,
+'rgb(239,138,98)',
+10,
+'rgb(178,24,43)'
+],
+'circle-stroke-color': 'white',
+'circle-stroke-width': 1,
+// Transition from heatmap to circle layer by zoom level
+'circle-opacity': [
+'interpolate',
+['linear'],
+['zoom'],
+7,
+0,
+8,
+1
+]
+}
+},
+'waterway-label'
+);
+});
+
+
+map.on('load', function() {
+  map.addSource('res', {
+type: 'geojson',
+// Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+// from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+data:
+'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/residential_property_price_indicators/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.',
+});
+
+map.addLayer({
+'id': 'res',
+'type': 'fill',
+'source': 'res',
+'layout': {},
+'paint': {
+'fill-color': '#088',
+'fill-opacity': 0.8
+}
+});
+});
 
 </script>
-
 
 
 
