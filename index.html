@@ -3,18 +3,8 @@
 	<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
 <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
-  <!-- Load Leaflet from CDN -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin=""></script>
+    <script src="https://unpkg.com/deck.gl@^8.0.0/dist.min.js"></script>
 
-  <!-- Load Esri Leaflet from CDN -->
-  <script src="https://unpkg.com/esri-leaflet@2.4.1/dist/esri-leaflet.js"
-    integrity="sha512-xY2smLIHKirD03vHKDJ2u4pqeHA7OQZZ27EjtqmuhDguxiUvdsOuXMwkg16PQrm9cgTmXtoxA6kwr8KBy3cdcw=="
-    crossorigin=""></script>
 <style>
 	body {margin: 0; padding:0;}
 	#map { position:absolute; top:0; bottom:0; width:100%; }
@@ -22,11 +12,6 @@
 </head>
 
 <body>
-  <!-- Include Leaflet.heat from CDN -->
-<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-
-<!-- Load Heatmap Feature Layer from CDN -->
-<script src="https://unpkg.com/esri-leaflet-heatmap@2.0.0"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
 <link
 rel="stylesheet"
@@ -219,33 +204,6 @@ map.getCanvas().style.cursor = '';
 });
 });
 
-var toggleableLayerIds = [ 'clusters', 'cluster-count', 'unclustered-point' ];
-
-var link = document.createElement('a');
-link.href = '#';
-link.className = 'active';
-link.textContent = "US Public Housing";
-link.onclick = function (e) {
-    for(var index in toggleableLayerIds) {
-      var clickedLayer = toggleableLayerIds[index];
-      e.preventDefault();
-      e.stopPropagation();
-
-      var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-      if (visibility === 'visible') {
-          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-          this.className = '';
-      } else {
-          this.className = 'active';
-          map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-      }
-    }
-
-};
-var layers = document.getElementById('menu');
-layers.appendChild(link);
-
 
 map.addControl(
 new MapboxGeocoder({
@@ -399,17 +357,87 @@ data:
 'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/residential_property_price_indicators/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.',
 });
 
+// map.addLayer({
+// 'id': 'res',
+// 'type': 'line',
+// 'source': 'res',
+// 'layout': {
+// // make layer visible by default
+// 'visibility': 'visible'
+// },
+// 'paint': {
+// 'line-color': '#088'}
+// });
+
 map.addLayer({
-'id': 'res',
-'type': 'fill',
+'id': 'res-line',
+'type': 'line',
 'source': 'res',
 'layout': {},
 'paint': {
-'fill-color': '#088',
-'fill-opacity': 0.8
+'line-color': '#627BC1',
+'line-width': 3
 }
 });
+
+var toggleableLayerIds = [ 'clusters', 'cluster-count', 'unclustered-point'];
+
+var link = document.createElement('a');
+link.href = '#';
+link.className = 'active';
+link.textContent = "US Public Housing";
+link.onclick = function (e) {
+    for(var index in toggleableLayerIds) {
+      var clickedLayer = toggleableLayerIds[index];
+      e.preventDefault();
+      e.stopPropagation();
+
+      var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+      if (visibility === 'visible') {
+          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+          this.className = '';
+      } else {
+          this.className = 'active';
+          map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+      }
+};
+};
+                var layers = document.getElementById('menu');
+layers.appendChild(link);
 });
+
+const {MapboxLayer, ScatterplotLayer} = deck;
+
+map.on('load', () => {
+      const firstLabelLayerId = map.getStyle().layers.find(layer => layer.type === 'symbol').id;
+
+      map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+            'fill-extrusion-color': '#aaa',
+
+            // use an 'interpolate' expression to add a smooth transition effect to the
+            // buildings as the user zooms in
+            'fill-extrusion-height': [
+                "interpolate", ["linear"], ["zoom"],
+                15, 0,
+                15.05, ["get", "height"]
+            ],
+            'fill-extrusion-base': [
+                "interpolate", ["linear"], ["zoom"],
+                15, 0,
+                15.05, ["get", "min_height"]
+            ],
+            'fill-extrusion-opacity': .6
+        }
+      }, firstLabelLayerId);
+    });
 
 </script>
 
