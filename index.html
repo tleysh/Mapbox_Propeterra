@@ -354,7 +354,7 @@ type: 'geojson',
 // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
 // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
 data:
-'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/residential_property_price_indicators/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.',
+'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/residential_property_price_indicators/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.',
 });
 
 // map.addLayer({
@@ -370,7 +370,7 @@ data:
 // });
 
 map.addLayer({
-'id': 'res-line',
+'id': 'Residential Property Price Indicators',
 'type': 'line',
 'source': 'res',
 'layout': {},
@@ -439,6 +439,116 @@ map.on('load', () => {
       }, firstLabelLayerId);
     });
 
+var toggleableLayerIds = ['Residential Property Price Indicators', 'Proportion of Population Living in Slums'];
+ 
+// set up the corresponding toggle button for each layer
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+var id = toggleableLayerIds[i];
+ 
+var link = document.createElement('a');
+link.href = '#';
+link.className = 'active';
+link.textContent = id;
+ 
+link.onclick = function(e) {
+var clickedLayer = this.textContent;
+e.preventDefault();
+e.stopPropagation();
+ 
+var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+ 
+// toggle layer visibility by changing the layout object's visibility property
+if (visibility === 'visible') {
+map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+this.className = '';
+} else {
+this.className = 'active';
+map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+}
+};
+ 
+var layers = document.getElementById('menu');
+layers.appendChild(link);
+}
+
+var toggleableLayerIds = [ 'land-consumption-rate', 'consumption_point'];
+
+var link = document.createElement('a');
+link.href = '#';
+link.className = 'active';
+link.textContent = "Change In Built Up Area 2000-2020";
+link.onclick = function (e) {
+    for(var index in toggleableLayerIds) {
+      var clickedLayer = toggleableLayerIds[index];
+      e.preventDefault();
+      e.stopPropagation();
+
+      var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+      if (visibility === 'visible') {
+          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+          this.className = '';
+      } else {
+          this.className = 'active';
+          map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+      }
+}
+};
+                var layers = document.getElementById('menu');
+layers.appendChild(link);
+
+map.on('load', function() {
+// Add an image to use as a custom marker
+map.loadImage(
+'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+function(error, image) {
+if (error) throw error;
+map.addImage('custom-marker', image);
+map.addSource('Proportion of Population Living in Slums', {
+'type': 'geojson',
+'data':
+'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/slums_percentage/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.'
+});
+ 
+// Add a symbol layer
+map.addLayer({
+'id': 'Proportion of Population Living in Slums',
+'type': 'symbol',
+'source': 'Proportion of Population Living in Slums',
+'layout':{
+  'icon-image': 'custom-marker'
+}
+});
+});
+});
+
+map.on('click', 'Proportion of Population Living in Slums', function(e) {
+var coordinates = e.features[0].geometry.coordinates.slice();
+var country = e.features[0].properties.geoAreaName;
+var description = e.features[0].properties.series_description;
+var value = e.features[0].properties.last_5_years_mean;
+// Ensure that if the map is zoomed out such that multiple
+// copies of the feature are visible, the popup appears
+// over the copy being pointed to.
+while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+}
+ 
+new mapboxgl.Popup()
+.setLngLat(coordinates)
+.setHTML(country + description + value)
+.addTo(map);
+});
+ 
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on('mouseenter', 'Proportion of Population Living in Slums', function() {
+map.getCanvas().style.cursor = 'pointer';
+});
+ 
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'Proportion of Population Living in Slums', function() {
+map.getCanvas().style.cursor = '';
+});
 </script>
 
 
