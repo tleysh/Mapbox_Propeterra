@@ -227,6 +227,10 @@ map.addLayer(
 'type': 'heatmap',
 'source': 'consumption',
 'maxzoom': 9,
+'layout': {
+// make layer visible by default
+'visibility': 'visible'
+},
 'paint': {
 // Increase the heatmap weight based on frequency and property magnitude
 'heatmap-weight': [
@@ -300,6 +304,10 @@ map.addLayer(
 'type': 'circle',
 'source': 'consumption',
 'minzoom': 7,
+'layout': {
+// make layer visible by default
+'visibility': 'visible'
+},
 'paint': {
 // Size circle radius by earthquake magnitude and zoom level
 'circle-radius': [
@@ -354,7 +362,7 @@ type: 'geojson',
 // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
 // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
 data:
-'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/residential_property_price_indicators/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.',
+'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/residential_property_price_indicators/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=Erew2u_2FbpdC_7xiV0ywrLX_Kl8Q604poXx_wxqWbT6_9NvubD_p65HRiwPk9IzgFjLQ_G5GEWMtQDnVfOKIGhSceZXhDmj1WseprKYLxE4Ek93WPpHF7TKTcKj7eGKiayXjU5PRLompJUBZHf5r0dmDZplwM24_Gehkj6m3CCX-QrTPe4tPaJxpNIHmGlHKX-WCYoQDYxBMCzF-ulpTZTnDxWX4saO4a5BZ_AM-cY.',
 });
 
 // map.addLayer({
@@ -439,7 +447,7 @@ map.on('load', () => {
       }, firstLabelLayerId);
     });
 
-var toggleableLayerIds = ['Residential Property Price Indicators', 'Proportion of Population Living in Slums'];
+var toggleableLayerIds = ['Residential Property Price Indicators', 'Proportion of Population Living in Slums', 'Social Impact Housing'];
  
 // set up the corresponding toggle button for each layer
 for (var i = 0; i < toggleableLayerIds.length; i++) {
@@ -507,7 +515,7 @@ map.addImage('custom-marker', image);
 map.addSource('Proportion of Population Living in Slums', {
 'type': 'geojson',
 'data':
-'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/slums_percentage/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.'
+'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/slums_percentage/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=Erew2u_2FbpdC_7xiV0ywrLX_Kl8Q604poXx_wxqWbT6_9NvubD_p65HRiwPk9IzgFjLQ_G5GEWMtQDnVfOKIGhSceZXhDmj1WseprKYLxE4Ek93WPpHF7TKTcKj7eGKiayXjU5PRLompJUBZHf5r0dmDZplwM24_Gehkj6m3CCX-QrTPe4tPaJxpNIHmGlHKX-WCYoQDYxBMCzF-ulpTZTnDxWX4saO4a5BZ_AM-cY.'
 });
  
 // Add a symbol layer
@@ -623,52 +631,21 @@ return true;
 map.on('load', function() {
 map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
  
-map.addSource('reall', {
+map.addSource('Social Impact Developments', {
 'type': 'geojson',
-'data': 'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/reall_data_explorer_2020_08_03_11_02_40/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=NmgiguEbQ1bZmc13TYBVMJjxT7EMcKT2wyfegpkqilMkWx9ZUjehi6o_NkD9FDD6CLQITqAUKyruc33HtaEayCmbxr-1dD61Z_BEkjos82X_RWGQdHvrGqds_oLIIWh0wq6vFHSlQan2hmqck_z3zANNk19lUksTjeGRj7Y1yl6y5GdD4jsDGF37Ew9zuyVDVUKsPVdboxjtpq1irXf687M5b6uCaFwChL6KWqqcfqo.'
+'data': 'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/reall_data_explorer_2020_08_03_11_02_40/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=Erew2u_2FbpdC_7xiV0ywrLX_Kl8Q604poXx_wxqWbT6_9NvubD_p65HRiwPk9IzgFjLQ_G5GEWMtQDnVfOKIGhSceZXhDmj1WseprKYLxE4Ek93WPpHF7TKTcKj7eGKiayXjU5PRLompJUBZHf5r0dmDZplwM24_Gehkj6m3CCX-QrTPe4tPaJxpNIHmGlHKX-WCYoQDYxBMCzF-ulpTZTnDxWX4saO4a5BZ_AM-cY.'
 });
 map.addLayer({
-'id': 'reall_point',
+'id': 'Social Impact Housing',
 'type': 'symbol',
-'source': 'reall',
+'source': 'Social Impact Developments',
 'layout': {
 'icon-image': 'pulsing-dot'
 }
 });
 });
 
-// Create a popup, but don't add it to the map yet.
-var popup = new mapboxgl.Popup({
-closeButton: false,
-closeOnClick: false
-});
- 
-map.on('mouseenter', 'reall_point', function(e) {
-// Change the cursor style as a UI indicator.
-map.getCanvas().style.cursor = 'pointer';
- 
-var coordinates = e.features[0].geometry.coordinates.slice();
-var description = e.features[0].properties.Name;
- 
-// Ensure that if the map is zoomed out such that multiple
-// copies of the feature are visible, the popup appears
-// over the copy being pointed to.
-while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-}
- 
-// Populate the popup and set its coordinates
-// based on the feature found.
-popup
-.setLngLat(coordinates)
-.setHTML(description)
-.addTo(map);
-});
- 
-map.on('mouseleave', 'reall_point', function() {
-map.getCanvas().style.cursor = '';
-popup.remove();
-});
+
 
 </script>
 
