@@ -1,4 +1,4 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoicGFydGhndW5kaSIsImEiOiJja2Q3NTJkbDMwNmI5MnlzOGtocGFwNmNxIn0.9NlLCYCxWo0aLvCpa_aY8w';
+mapboxgl.accessToken = 'pk.eyJ1IjoiY2FzaGVsbCIsImEiOiJja2Ryaml2bzQwOWloMnlvN2htdXdra2c3In0.eZwWsYuro0bwKk16bScIbw';
 var map = new mapboxgl.Map({
 style: 'mapbox://styles/mapbox/light-v10',
 center: [-74.0066, 40.7135],
@@ -443,7 +443,7 @@ map.addImage('custom-marker', image);
 map.addSource('Proportion of Population Living in Slums', {
 'type': 'geojson',
 'data':
-'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/slums_percentage/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=Erew2u_2FbpdC_7xiV0ywrLX_Kl8Q604poXx_wxqWbT6_9NvubD_p65HRiwPk9IzgFjLQ_G5GEWMtQDnVfOKIGhSceZXhDmj1WseprKYLxE4Ek93WPpHF7TKTcKj7eGKiayXjU5PRLompJUBZHf5r0dmDZplwM24_Gehkj6m3CCX-QrTPe4tPaJxpNIHmGlHKX-WCYoQDYxBMCzF-ulpTZTnDxWX4saO4a5BZ_AM-cY.'
+'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/slums_percentage/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=DnhHEy1TVAoIgmR4DIVMn6wTDau_TO0H5WRdnqZaq_j4peNk2R-B2VrEWzxdsT3eJYFsWAOxMoWaAmTERRneiNjHX_1AHXomZW8KePKSEH-6gmKBVBDMHG7hfoUnUTGR6hfPnI-yihGycEgAHccGSFjGrLwMszHRHCT1A1i7iuJ_xjlsN_OqvscsLiQ6fiilBZeR7_Dxd_XnSXhoQ-ii_PmSxTL4HkH9k38e1WuQcfA.'
 });
  
 // Add a symbol layer
@@ -559,17 +559,44 @@ return true;
 map.on('load', function() {
 map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
  
-map.addSource('Social Impact Developments', {
+map.addSource('Social Impact Housing', {
 'type': 'geojson',
-'data': 'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/reall_data_explorer_2020_08_03_11_02_40/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=Erew2u_2FbpdC_7xiV0ywrLX_Kl8Q604poXx_wxqWbT6_9NvubD_p65HRiwPk9IzgFjLQ_G5GEWMtQDnVfOKIGhSceZXhDmj1WseprKYLxE4Ek93WPpHF7TKTcKj7eGKiayXjU5PRLompJUBZHf5r0dmDZplwM24_Gehkj6m3CCX-QrTPe4tPaJxpNIHmGlHKX-WCYoQDYxBMCzF-ulpTZTnDxWX4saO4a5BZ_AM-cY.'
+'data': 'https://services5.arcgis.com/mv4wB4q9dMbOaZn3/ArcGIS/rest/services/reall_data_explorer_2020_08_03_11_02_40/FeatureServer/0/query?where=ObjectID%3E0&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=*&returnHiddenFields=false&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=ilJm9UoBP39uHQzJw_k0YLapVz20TqtblKn384JZLV2bMkYl7EU3i_PBPPx8rSfOwXr9652Y5NxBJCsGv7oXIKWun0kqGo_EC_xqRi9n1DLeU-KrnXOIjWP_m3_vW7f3Z6KiwdvHfnhl2kEhiCxYalqbbuSezIgif0r2s5PRM07Y4ywHaktomVoWQb_CXJCPJ6j-E2NqGzWUFdXpgglMVUtrPORgPhw3571DVfQQgzA.'
 });
 map.addLayer({
 'id': 'Social Impact Housing',
 'type': 'symbol',
-'source': 'Social Impact Developments',
+'source': 'Social Impact Housing',
 'layout': {
 'icon-image': 'pulsing-dot'
 }
+});
+
+map.on('click', 'Social Impact Housing', function(e) {
+var coordinates = e.features[0].geometry.coordinates.slice();
+var description = e.features[0].properties.Name;
+ 
+// Ensure that if the map is zoomed out such that multiple
+// copies of the feature are visible, the popup appears
+// over the copy being pointed to.
+while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+}
+ 
+new mapboxgl.Popup()
+.setLngLat(coordinates)
+.setHTML(description)
+.addTo(map);
+});
+ 
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on('mouseenter', 'places', function() {
+map.getCanvas().style.cursor = 'pointer';
+});
+ 
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'places', function() {
+map.getCanvas().style.cursor = '';
 });
 });
 
